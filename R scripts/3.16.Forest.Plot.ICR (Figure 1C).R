@@ -118,6 +118,7 @@ cochrane_from_rmeta =
 tabletext<-cbind(
   c("Cancer", as.character(HR.table$Cancertype)[c(1:n.cancers)]),
   c("N", HR.table$N[c(1:n.cancers)]),
+  c("N events", HR.table$N_events[c(1:n.cancers)]),
   c("N ICR High", HR.table$ICR_High[c(1:n.cancers)]),
   c("N ICR Low", HR.table$ICR_Low[c(1:n.cancers)]),
   c("p-value", HR.table$p_value[c(1:n.cancers)]),
@@ -131,7 +132,7 @@ if(Outcome == ""){
   pdf(file = paste0("./5_Figures/Pancancer_plots/", download.method, "/Forest_plots/3.16.", Source_surv_data, "_forest_plot_Skipped_DBLC_LAML_TGCT_THYM_PCPG.pdf"),
       height = 6.5, width = 13)
 }else{
-  pdf(file = paste0("./5_Figures/Pancancer_plots/", download.method, "/Forest_plots/3.16.Final", Outcome, "_", Source_surv_data, "_forest_plot_Skipped_DBLC_LAML_TGCT_THYM_PCPG.pdf"),
+  pdf(file = paste0("./5_Figures/Pancancer_plots/", download.method, "/Forest_plots/3.16.Final_Revised_", Outcome, "_", Source_surv_data, "_forest_plot_Skipped_DBLC_LAML_TGCT_THYM_PCPG.pdf"),
       height = 6.5, width = 13)
 }
 

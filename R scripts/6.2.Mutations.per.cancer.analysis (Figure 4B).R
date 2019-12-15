@@ -25,7 +25,7 @@ download.method = "Assembler_Panca_Normalized_filtered"
 Cutoff_HR = 1
 ICR_k = "HML_classification"
 Source_surv_data = "Cell_paper"
-only_significant = "only_significant"
+only_significant = ""
 cancer_scaled_ICR = "not_scaled"
 
 # Load data
@@ -169,11 +169,12 @@ data.info$ICR.Enabled.Neutral.Disabled = factor(data.info$ICR.Enabled.Neutral.Di
 data.info = data.info[order(match(data.info$Cancer, Cancer_order)),]
 #col_fun = circlize::colorRamp2(c(min(ratio_ICRscore_MUT_vs_WT, na.rm = TRUE), 1, max(ratio_ICRscore_MUT_vs_WT, na.rm = TRUE)), c("blue", "white", "red"))
 #col_fun = circlize::colorRamp2(c(0.5, 1, 4), c("blue", "white", "red"))
+#col_fun = circlize::colorRamp2(c(0.9, 1, max(ratio_ICRscore_MUT_vs_WT, na.rm = TRUE)), c("#7BAFB9", "#231F23", "#F1E84D"))
 col_fun = circlize::colorRamp2(c(0.9, 1, max(ratio_ICRscore_MUT_vs_WT, na.rm = TRUE)), c("blue", "white", "red"))
-ha_column = HeatmapAnnotation(df = data.frame(`ICR Enabled/Neutral/Disabled` = data.info$ICR.Enabled.Neutral.Disabled),
+ha_column = HeatmapAnnotation(df = data.frame(`ICR` = data.info$ICR.Enabled.Neutral.Disabled),
                               show_annotation_name = TRUE,
                               show_legend = FALSE,
-                              col = list(`ICR.Enabled.Neutral.Disabled` = c("Pancancer" = "white", "ICR enabled" = "orange", 
+                              col = list(`ICR` = c("Pancancer" = "white", "ICR enabled" = "orange", 
                                                                             "ICR neutral" = "grey", "ICR disabled" = "purple"))
                                          
 )
@@ -182,7 +183,7 @@ ratio_ICRscore_MUT_vs_WT = ratio_ICRscore_MUT_vs_WT[,order(match(colnames(ratio_
 
 # Heatmap
 dir.create(paste0("./5_Figures/Pancancer_plots/", download.method, "/Mutation"), showWarnings = FALSE)
-png(paste0("./5_Figures/Pancancer_plots/", download.method, "/Mutation/v2_Ratio_ICR_score_MUT_vs_WT_", only_significant, "_", cancer_scaled_ICR,".png"), res = 600, width = 14, height = 12, units = "in")
+png(paste0("./5_Figures/Pancancer_plots/", download.method, "/Mutation/v6_Ratio_ICR_score_MUT_vs_WT_", only_significant, "_", cancer_scaled_ICR,".png"), res = 600, width =6, height = 15, units = "in")
 Heatmap(ratio_ICRscore_MUT_vs_WT, 
         name = "Ratio between Mean ICR score \nin Mutated versus WT samples", 
         cluster_rows = FALSE,
@@ -192,8 +193,15 @@ Heatmap(ratio_ICRscore_MUT_vs_WT,
         row_names_gp = gpar(fontsize = 12),
         col = col_fun,
         top_annotation = ha_column,
+        na_col = "white",
         column_title = paste0("Ratio between ICR score \nMutated versus WT samples"),
-        row_names_max_width = unit(9, "in")
+        row_names_max_width = unit(9, "in"),
+        show_heatmap_legend = TRUE,
+        rect_gp = gpar(type = "none"),
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.rect(x = x, y = y, width = width, height = height, gp = gpar(col = "white", fill = "#EBEBEB"))
+          grid.circle(x = x, y = y, r = 0.012,gp = gpar(fill = col_fun(ratio_ICRscore_MUT_vs_WT[i, j]), col = NA))
+        }
 )
 
 dev.off()
